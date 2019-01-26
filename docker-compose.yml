@@ -20,11 +20,29 @@ services:
       - ./:/var/www/
     build:
       context: ./docker/backend/php-fpm
+    environment:
+      - "DB_HOST=mysql"
+      - "DB_PORT=3306"
 
   backend-php-cli:
     volumes:
       - ./:/var/www/
     build:
       context: ./docker/backend/php-cli
-    working_dir: /var/www/
+    environment:
+      - "DB_HOST=mysql"
+      - "DB_PORT=3306"
     tty: true
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - "MYSQL_ROOT_PASSWORD=secret"
+      - "MYSQL_USER=app"
+      - "MYSQL_PASSWORD=secret"
+      - "MYSQL_DATABASE=app"
+    ports:
+      - "33061:3306"
+    volumes:
+      - ./storage/docker/mysql:/var/lib/mysql
+
